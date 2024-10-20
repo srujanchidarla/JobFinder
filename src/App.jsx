@@ -15,14 +15,21 @@ import EditJobPage from "./pages/EditJobPage";
 const App = () => {
   // Add New Job
   const addJob = async (newJob) => {
-    const res = await fetch("/api/jobs", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newJob),
-    });
-    return;
+    try {
+      const res = await fetch("/api/jobs", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newJob),
+      });
+      if (!res.ok) {
+        throw new Error("Failed to add job");
+      }
+      return res.json(); // or whatever the response is
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // Delete Job
@@ -30,7 +37,7 @@ const App = () => {
     const res = await fetch(`/api/jobs/${id}`, {
       method: "DELETE",
     });
-    return;
+    return res.ok;
   };
 
   // Update Job
@@ -42,7 +49,7 @@ const App = () => {
       },
       body: JSON.stringify(job),
     });
-    return;
+    return res.ok;
   };
 
   const router = createBrowserRouter(
