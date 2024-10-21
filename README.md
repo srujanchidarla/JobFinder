@@ -6,7 +6,7 @@
 **JobFinder** is a modern, responsive, and feature-rich job listing platform built with **React** and **TailwindCSS**. It allows users to search for job listings dynamically from external APIs, filter jobs by categories, and explore various job opportunities with an intuitive and interactive UI. Whether you're a job seeker or an employer, JobFinder provides an excellent user experience for both.
 
 ## Features
-- **Dynamic Job Listings**: Fetch job listings from external APIs using Adzuna, filter them by category, and limit the number of jobs displayed on the home page.
+- **Dynamic Job Listings**: Fetch job listings from external APIs using Adzuna, filter them by category and limit the number of jobs displayed on the home page.
 - **Show More/Show Less Toggle**: Job descriptions are truncated by default, with the ability to toggle between showing the full description or just a preview.
 - **Integrated Icons**: Icons for job types, locations, and salaries to improve the visual experience.
 - **Responsive Design**: Works seamlessly across devices with fully responsive design.
@@ -42,7 +42,3 @@ Explore all available jobs dynamically loaded from the Adzuna API, with direct a
    ```bash
    git clone https://github.com/srujanchidarla/JobFinder.git
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/srujanchidarla/JobFinder.git
-   ```
