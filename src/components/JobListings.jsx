@@ -1,66 +1,101 @@
 import { useState, useEffect } from "react";
-import JobListing from "./JobListing";
-import Spinner from "./Spinner";
+import { useParams } from "react-router-dom";
 
-const JobListings = ({ isHome = false }) => {
+const JobListings = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // State to store fetch errors
+  const [error, setError] = useState(null);
+  const { category } = useParams(); // Get category from URL if using dynamic routes
+
+  const ADZUNA_API_KEY = import.meta.env.VITE_ADZUNA_API_KEY;
+  const ADZUNA_APP_ID = import.meta.env.VITE_ADZUNA_APP_ID;
 
   useEffect(() => {
     const fetchJobs = async () => {
-      const apiUrl = isHome ? "/api/jobs?_limit=3" : "/api/jobs";
+      // Construct the API URL with category filters (if any)
+      let apiUrl = `https://api.adzuna.com/v1/api/jobs/us/search/1?app_id=${ADZUNA_APP_ID}&app_key=${ADZUNA_API_KEY}&results_per_page=10`;
+
+      // If a category is provided (like 'software-engineer'), include it as a filter in the query
+      if (category) {
+        apiUrl += `&what=${category.replace("-", " ")}`; // Replace hyphens with spaces for better query formatting
+      }
+
       try {
         const res = await fetch(apiUrl);
-
         if (!res.ok) {
-          // Check if response is not ok (e.g., 404 or 500)
-          throw new Error(`Error: ${res.status} ${res.statusText}`);
+          throw new Error(`Error fetching jobs: ${res.status}`);
         }
 
         const data = await res.json();
-        setJobs(data);
+        setJobs(data.results); // Assuming `results` contains job listings
       } catch (error) {
-        console.log("Error fetching data", error);
-        setError(error.message); // Store the error message in state
+        console.error("Error fetching job data:", error);
+        setError(error.message);
       } finally {
         setLoading(false);
       }
     };
 
     fetchJobs();
-  }, [isHome]); // Add isHome to the dependency array so it fetches again if this changes
+  }, [category]); // Fetch jobs again if the category changes
 
   if (loading) {
-    return <Spinner loading={loading} />;
+    return <p className="text-center text-lg">Loading jobs...</p>;
   }
 
   if (error) {
-    return (
-      <div className="bg-red-100 text-red-700 p-4 text-center">
-        <p>Failed to load job listings. Please try again later.</p>
-      </div>
-    );
+    return <p className="text-center text-red-500">Error: {error}</p>;
   }
 
   return (
-    <section className="bg-blue-50 px-4 py-10">
-      <div className="container-xl lg:container m-auto">
-        <h2 className="text-3xl font-bold text-indigo-500 mb-6 text-center">
-          {isHome ? "Recent Jobs" : "Browse Jobs"}
-        </h2>
+    <div className="container mx-auto py-10 px-4">
+      <h2 className="text-3xl font-bold text-center text-indigo-600 mb-8">
+        {category
+          ? `Showing ${category.replace("-", " ")} Jobs`
+          : "Job Listings"}
+      </h2>
 
-        {jobs.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {jobs.map((job) => (
-              <JobListing key={job.id} job={job} />
-            ))}
-          </div>
-        ) : (
-          <p className="text-center text-gray-500">No jobs available.</p>
-        )}
-      </div>
-    </section>
+      {jobs.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {jobs.map((job) => (
+            <div
+              key={job.id}
+              className="bg-white rounded-lg shadow-md p-6 flex flex-col justify-between"
+            >
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900">
+                  {job.title}
+                </h3>
+                <p className="text-gray-700 mt-2">
+                  {job.description.substring(0, 100)}...
+                </p>
+                <p className="text-gray-600 mt-3">
+                  <strong>Location:</strong> {job.location.display_name}
+                </p>
+                <p className="text-gray-600 mt-1">
+                  <strong>Salary:</strong> ${job.salary_min} - ${job.salary_max}{" "}
+                  / year
+                </p>
+              </div>
+              <div className="mt-6">
+                <a
+                  href={job.redirect_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full block text-center transition duration-300 ease-in-out"
+                >
+                  Apply Here
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-center text-gray-500">
+          No jobs available in this category.
+        </p>
+      )}
+    </div>
   );
 };
 

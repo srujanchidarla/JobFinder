@@ -8,18 +8,20 @@ const JobPage = ({ deleteJob }) => {
   const { id } = useParams();
   const job = useLoaderData();
 
-  const onDeleteClick = (jobId) => {
+  const onDeleteClick = async (jobId) => {
     const confirm = window.confirm(
       "Are you sure you want to delete this listing?"
     );
 
     if (!confirm) return;
 
-    deleteJob(jobId);
-
-    toast.success("Job deleted successfully");
-
-    navigate("/jobs");
+    const success = await deleteJob(jobId);
+    if (success) {
+      toast.success("Job deleted successfully");
+      navigate("/jobs");
+    } else {
+      toast.error("Failed to delete job");
+    }
   };
 
   return (
@@ -44,7 +46,9 @@ const JobPage = ({ deleteJob }) => {
                 <h1 className="text-3xl font-bold mb-4">{job.title}</h1>
                 <div className="text-gray-500 mb-4 flex align-middle justify-center md:justify-start">
                   <FaMapMarker className="text-orange-700 mr-1" />
-                  <p className="text-orange-700">{job.location}</p>
+                  <p className="text-orange-700">
+                    {job.location.city}, {job.location.state}
+                  </p>
                 </div>
               </div>
 
@@ -52,38 +56,30 @@ const JobPage = ({ deleteJob }) => {
                 <h3 className="text-indigo-800 text-lg font-bold mb-6">
                   Job Description
                 </h3>
-
                 <p className="mb-4">{job.description}</p>
 
                 <h3 className="text-indigo-800 text-lg font-bold mb-2">
                   Salary
                 </h3>
-
-                <p className="mb-4">{job.salary} / Year</p>
+                <p className="mb-4">
+                  ${job.salary.min} - ${job.salary.max} / Year
+                </p>
               </div>
             </main>
 
-            {/* <!-- Sidebar --> */}
+            {/* Sidebar */}
             <aside>
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <h3 className="text-xl font-bold mb-6">Company Info</h3>
-
                 <h2 className="text-2xl">{job.company.name}</h2>
-
                 <p className="my-2">{job.company.description}</p>
-
                 <hr className="my-4" />
-
                 <h3 className="text-xl">Contact Email:</h3>
-
                 <p className="my-2 bg-indigo-100 p-2 font-bold">
                   {job.company.contactEmail}
                 </p>
-
                 <h3 className="text-xl">Contact Phone:</h3>
-
                 <p className="my-2 bg-indigo-100 p-2 font-bold">
-                  {" "}
                   {job.company.contactPhone}
                 </p>
               </div>
@@ -112,9 +108,17 @@ const JobPage = ({ deleteJob }) => {
 };
 
 const jobLoader = async ({ params }) => {
-  const res = await fetch(`/api/jobs/${params.id}`);
-  const data = await res.json();
-  return data;
+  try {
+    const res = await fetch(`/api/jobs/${params.id}`);
+    if (!res.ok) {
+      throw new Error("Failed to load job");
+    }
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Response("Error loading job", { status: 500 });
+  }
 };
 
 export { JobPage as default, jobLoader };
