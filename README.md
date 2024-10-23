@@ -67,3 +67,39 @@
 
    ```bash
    git clone https://github.com/srujanchidarla/JobFinder.git
+
+2. **Navigate to the project directory**:
+
+   ```bash
+   cd JobFinder
+3. **Install dependencies**:
+
+   ```bash
+   npm install
+4. **Add your Adzuna API keys**:
+   - Create a .env file in the root of the project and add your API key and App ID from Adzuna:
+   ```bash
+   VITE_ADZUNA_API_KEY=your_adzuna_api_key
+   VITE_ADZUNA_APP_ID=your_adzuna_app_id
+5. **Run the application**:
+   ```bash
+   npm run dev
+6. **Open the application in your browser**:
+   - Visit http://localhost:3000 to explore JobFinder.
+
+## Project Structure
+
+```bash
+JobFinder/
+├── src/
+│   ├── components/           # Reusable components (Hero, JobCard, Navbar)
+│   ├── pages/                # Page components (HomePage, JobsPage, JobPage)
+│   ├── assets/               # Media and static assets
+│   ├── App.jsx               # Main App component
+│   ├── index.jsx             # Entry point for the React app
+│   └── styles/               # TailwindCSS for styling
+├── public/                   # Public assets
+├── .env                      # API keys and environment variables
+├── README.md                 # Project readme file
+├── package.json              # Project dependencies and scripts
+└── tailwind.config.js        # TailwindCSS configuration
