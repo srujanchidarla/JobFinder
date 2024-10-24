@@ -20,9 +20,10 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-bold text-white mb-4">About Me</h3>
             <p>
-              I am a passionate web developer with expertise in React, Angular,
-              and other modern web technologies. I love building web
-              applications that are fast, secure, and scalable.
+              I am Srujan Chidarla I am a passionate web developer with
+              expertise in React, Angular, and other modern web technologies. I
+              love building web applications that are fast, secure, and
+              scalable.
             </p>
           </div>
 

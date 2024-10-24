@@ -9,7 +9,7 @@ const HomeCards = () => {
           <Card>
             <h2 className="text-2xl font-bold">For Developers</h2>
             <p className="mt-2 mb-4">
-              Browse our React jobs and start your career today
+              Browse our jobs and start your career today
             </p>
             <Link
               to="/jobs"
