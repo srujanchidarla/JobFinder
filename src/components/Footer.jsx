@@ -58,7 +58,7 @@ const Footer = () => {
                 <FaEnvelope className="mr-2" /> Email: srujanvarmamng@gmail.com
               </li>
               <li className="flex items-center">
-                <FaPhoneAlt className="mr-2" /> Phone: +120 188 4400
+                <FaPhoneAlt className="mr-2" /> Phone: +120 188 447 24
               </li>
               <li className="flex items-center">
                 <FaMapMarkerAlt className="mr-2" /> Location: Maryland, USA
