@@ -3,7 +3,6 @@ import {
   FaLinkedin,
   FaInstagram,
   FaEnvelope,
-  FaPhoneAlt,
   FaMapMarkerAlt,
   FaUser,
 } from "react-icons/fa";
@@ -55,11 +54,10 @@ const Footer = () => {
             <h3 className="text-xl font-bold text-white mb-4">Contact Info</h3>
             <ul className="space-y-3">
               <li className="flex items-center">
-                <FaEnvelope className="mr-2" /> Email: srujanvarmamng@gmail.com
+                <FaEnvelope className="mr-2" /> Email:
+                contact@srujanchidarla.com
               </li>
-              <li className="flex items-center">
-                <FaPhoneAlt className="mr-2" /> Phone: +120 188 447 24
-              </li>
+
               <li className="flex items-center">
                 <FaMapMarkerAlt className="mr-2" /> Location: Maryland, USA
               </li>
